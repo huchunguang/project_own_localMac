@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="./build/react.js"></script>
+    <script src="./build/JSXTransformer.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/jsx">
+        function tick(){
+            const element=(
+                    <div>
+                    <h1>hello world!</h1>
+                    <h2>It is {new Date().toLocaleTimeString()}</h2>
+
+                    </div>
+                    );
+            React.render(element,document.getElementById('root'));
+
+        }
+setInterval(tick,1000);
+        </script>
+</body>
+</html>

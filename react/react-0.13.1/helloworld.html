@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="build/react.js" ></script>
+    <script src="build/JSXTransformer.js" ></script>
+</head>
+<body>
+    <div id="example"></div>    
+    <script  type="text/jsx">
+        function formatName(user){
+            return user.firstName+' '+user.lastName;
+        }
+		const user={
+    				firstName:'huchunguang',
+    				lastName:'caojinghan'
+};
+		const element=(
+        <h1>hello,{formatName(user)}!</h1>
+        );
+		const createEle=React.createElement(
+        'h1',
+        {className:'greeting'},
+        'this is a React create Element'
+        );
+        React.render(
+                createEle,
+                document.getElementById('example')
+                );
+    </script>
+</body>
+</html>

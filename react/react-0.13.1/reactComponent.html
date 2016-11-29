@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="./build/react.js"></script>
+    <script src="./build/JSXTransformer.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/jsx">
+        class Welcome extends React.Component{
+        		 getInitialState(){
+            	 	alert('initalState');
+            	 }
+             render(){
+                   return <h1>hello,{this.props.name}</h1>;
+            	 }
+            	 componentDidMount(){
+            	 	alert('did');
+            	 }
+            	 componentWillMount(){
+            	 	alert('will');
+            	 }
+            
+            	
+          
+        }
+const element=<Welcome name="huchunguang"/>;
+React.render(element,document.getElementById('root'));
+
+    </script>
+    
+</body>
+</html>

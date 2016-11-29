@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Css伪类选择器</title>
+<style type="text/css" media="screen">
+	/*ul li:fi/*rst-child{
+		color: red;		
+	}
+	ul li:last-child{
+		color: blue;
+	}**/
+	ul li:nth-child(2n+1){
+		background-color: green;
+	}ul li:nth-child(2n+2){
+		background-color: gray;
+	}
+
+	h2:nth-of-type(even){
+		background-color: red;
+	}
+	h2:nth-of-type(odd){
+		background-color: blue;
+	}
+</style>
+</head>
+<h1 id="">Css伪类选择器</h1>
+<body>
+	<ul>
+		<li>第一个项目</li>
+		<li>第二个项目</li>
+		<li>第三个项目</li>
+		<li>第四个项目</li>
+		<li>第五个项目</li>
+	</ul> 
+		<h2> 这是一段H2元素的内容 </h2>
+		<p>
+			这是一个p元素的内容
+		</p>
+		<h2> 这是一段H2元素的内容 </h2>
+		<p>
+			这是一个p元素的内容
+		</p>
+		<h2> 这是一段H2元素的内容 </h2>
+		<p>
+			这是一个p元素的内容
+		</p>
+		<h2> 这是一段H2元素的内容 </h2>
+		<p>
+			这是一个p元素的内容
+		</p>
+</body>
+</html>
