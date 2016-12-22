@@ -1,0 +1,13 @@
+{
+    "name": "huchunguang/php-amqplib",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "huchunguang",
+            "email": "huchunguang123@gmail.com"
+        }
+    ],
+    "require": {
+                "php-amqplib/php-amqplib": "2.5.*"
+    }
+}
