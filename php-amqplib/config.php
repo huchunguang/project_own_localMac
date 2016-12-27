@@ -1,10 +1,9 @@
 <?php
 
-require_once __DIR__.'/vendor/autoload.php';
-define('HOST', 'localhost');
-define('PORT', 5672);
-define('USER', 'guest');
-define('PASS', 'guest');
+define('HOST', 'mq01.beta1.fn');
+define('PORT', '80');
+define('USER', 'drp@rabbitmq');
+define('PASS', 'drp@rabbitmq');
 define('VHOST', '/');
 
 //If this is enabled you can see AMQP output on the CLI

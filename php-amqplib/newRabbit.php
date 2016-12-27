@@ -2,6 +2,7 @@
 require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/config.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 class rabbit
 {
     public $queue='';
@@ -19,7 +20,7 @@ class rabbit
     {
         $this->conn=new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
         $this->ch=$this->conn->channel();
-        if (isset($this->exchange_name) && !empty($this->exchange_name))
+        if (isset($exchange_name) && !empty($exchange_name))
         {
             $this->exchange_name=$exchange_name;
         }
@@ -33,12 +34,12 @@ class rabbit
         }
         return self::$_instance;
     }
-    public function sendList($delivery_persist=false,$exchange_name='',$exchange_type='fanout',$data='',$routing_key='')
+    public function sendList(array $data=[],$routing_key='',$delivery_persist=false)
     {
-        $message_proper=null;
-        $this->ch->exchange_declare($exchange_name, 'topic',false,false,false);
-        $route_key=isset($argv[1]) && !empty($argv[1])? $argv[1]:'anonymous.info';
-        $data=implode(' ', array_slice($argv, 2));
+        $message_proper=[];
+//         $this->ch->exchange_declare($this->exchange_name, $this->exchange_type,false,false,false);
+        $route_key=isset($routing_key) && !empty($routing_key)? $routing_key:'';
+        $data=json_encode($data);
         if (empty($data)) $data='Hello World!';
         if ($delivery_persist)
         {
@@ -47,14 +48,14 @@ class rabbit
             );
         }
         $msg=new AMQPMessage($data,$message_proper);
-        $this->ch->basic_publish($msg,$exchange_name,$routing_key);
+        $this->ch->basic_publish($msg,$this->exchange_name,$routing_key);
     }
     public function get($severities='',$is_durable=true,$autodel=false)
     {
         $this->_is_durable=$is_durable;
-        $this->ch->exchange_declare($this->exchange_name, $this->exchange_type,false,$is_durable,$autodel);
+//         $this->ch->exchange_declare($this->exchange_name, $this->exchange_type,false,$is_durable,$autodel);
         list($queue_name,)=$this->ch->queue_declare("",false,$this->_is_durable,true,false);
-        $this->queue_name=$queue_name;
+//         $this->queue_name=$queue_name;
         if ($this->exchange_type!='fanout' && isset($severities) && !empty($severities))
         {
             $severities=explode('_', $severities);
@@ -68,12 +69,16 @@ class rabbit
                 $this->ch->queue_bind($queue_name, $this->exchange_name,$severity);
             }    
         }
+        else
+        {
+//             $this->ch->queue_bind($queue_name, $this->exchange_name);
+        }
         return $this->prepare_consumer();
     }
     
-    public function prepare_consumer($noLocal = false, $noAck = true, $exclusive = true, $noWait = false)
+    public function prepare_consumer($noLocal = false, $noAck = true, $exclusive = false, $noWait = false)
     {
-        $this->ch->basic_consume($this->queue_name, '', $noLocal, $noAck, $exclusive, $noWait, 
+        $this->ch->basic_consume($this->exchange_name, '', $noLocal, $noAck, $exclusive, $noWait, 
                 array($this,'process_message'));
         while (count($this->ch->callbacks)) {
             $this->ch->wait();
@@ -88,7 +93,7 @@ class rabbit
         echo $msg->body;
         echo "\n--------\n";
     
-        $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+//         $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
     
         // Send a message with the string "quit" to cancel the consumer.
         if ($msg->body === 'quit') {
@@ -102,3 +107,8 @@ class rabbit
         $this->ch->close();
     }
 }
+// $result=rabbit::getInstance('drp.drp.changeSkuInfo','fanout')->get();
+// $result=json_decode($result,true);
+// print_r($result);die;
+ $sender=rabbit::getInstance('drp.drp.qty.updateScale')->sendList(['username'=>'chunguang.hu','msg'=>'this is a test message from chunguang.hu']);
+////////////////////////////////////////////////////////////////////////
