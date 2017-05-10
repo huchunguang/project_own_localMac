@@ -11,6 +11,7 @@ class rabbit
     public $exchange_type='';
     public $consumer_tag='';
     public $queue_name='';
+    public $receive_data='';//接收到的消息
     protected $_is_durable=true;//是否为persistent
     protected  $ch=null;//channel对象
     protected  $conn=null;//channel对象
@@ -54,7 +55,7 @@ class rabbit
     {
         $this->_is_durable=$is_durable;
 //         $this->ch->exchange_declare($this->exchange_name, $this->exchange_type,false,$is_durable,$autodel);
-        list($queue_name,)=$this->ch->queue_declare("",false,$this->_is_durable,true,false);
+//         list($queue_name,)=$this->ch->queue_declare("",false,$this->_is_durable,true,false);
 //         $this->queue_name=$queue_name;
         if ($this->exchange_type!='fanout' && isset($severities) && !empty($severities))
         {
@@ -73,7 +74,8 @@ class rabbit
         {
 //             $this->ch->queue_bind($queue_name, $this->exchange_name);
         }
-        return $this->prepare_consumer();
+         $this->prepare_consumer();
+         return $this->receive_data;
     }
     
     public function prepare_consumer($noLocal = false, $noAck = true, $exclusive = false, $noWait = false)
@@ -99,7 +101,7 @@ class rabbit
         if ($msg->body === 'quit') {
             $msg->delivery_info['channel']->basic_cancel($msg->delivery_info['consumer_tag']);
         }
-        return $msg->body;
+         $this->receive_data=$msg->body;
     }
     public function __destruct()
     {
@@ -107,8 +109,8 @@ class rabbit
         $this->ch->close();
     }
 }
-// $result=rabbit::getInstance('drp.drp.changeSkuInfo','fanout')->get();
-// $result=json_decode($result,true);
-// print_r($result);die;
- $sender=rabbit::getInstance('drp.drp.qty.updateScale')->sendList(['username'=>'chunguang.hu','msg'=>'this is a test message from chunguang.hu']);
+$result=rabbit::getInstance('drp.drp.changeSkuInfo','fanout')->get();
+$result=json_decode($result,true);
+print_r($result);die;
+//  $sender=rabbit::getInstance('drp.drp.qty.updateScale')->sendList(['username'=>'chunguang.hu','msg'=>'this is a test message from chunguang.hu']);
 ////////////////////////////////////////////////////////////////////////

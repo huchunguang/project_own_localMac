@@ -1,6 +1,6 @@
 <?php
-echo __DIR__ . '/config.php';
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPConnection;
 
 $exchange = 'router';
@@ -40,19 +40,21 @@ $ch->queue_bind($queue, $exchange);
 /**
  * @param \PhpAmqpLib\Message\AMQPMessage $msg
  */
+//  $data=[];
 function process_message($msg)
 {
-    print_r($msg);die;
+    global $data;
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
-
-    $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+    $data[]= $msg->body;
+    
+//     $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
 
     // Send a message with the string "quit" to cancel the consumer.
-    if ($msg->body === 'quit') {
+//     if ($msg->body === 'quit') {
         $msg->delivery_info['channel']->basic_cancel($msg->delivery_info['consumer_tag']);
-    }
+//     }
 }
 
 /*
@@ -64,6 +66,7 @@ function process_message($msg)
     nowait:
     callback: A PHP Callback
 */
+$ch->basic_qos(null, 1, null);
 
 $ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
@@ -75,6 +78,7 @@ function shutdown($ch, $conn)
 {
     $ch->close();
     $conn->close();
+    
 }
 
 register_shutdown_function('shutdown', $ch, $conn);
@@ -83,3 +87,5 @@ register_shutdown_function('shutdown', $ch, $conn);
 while (count($ch->callbacks)) {
     $ch->wait();
 }
+// print_r($data);
+
