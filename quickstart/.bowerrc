@@ -1,0 +1,7 @@
+{
+    "cwd":"/usr/local/webserver/source_code/project_own_local/quickstart",
+    "directory":"bower_components",
+    "color":true,
+    "timeout":60000,
+    "interactive":true
+}

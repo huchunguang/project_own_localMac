@@ -1,0 +1,10 @@
+{
+  "name": "Laravel Bower",
+  "description": "Laravel foregroup package description Bower linked:https://bower.io/docs/api/",
+  "main": "",
+  "authors": [
+    "huchunguang <huchunguang123@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/huchunguang"
+}
